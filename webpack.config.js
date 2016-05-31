@@ -11,7 +11,10 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'app.js',
-        publicPath: '/build/'
+        publicPath: 'http://localhost:3000/build/'
+    },
+    node: {
+        fs: "empty"
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin()

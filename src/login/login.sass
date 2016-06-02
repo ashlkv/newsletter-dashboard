@@ -1,0 +1,38 @@
+@import './../vars'
+
+$submit-width: 6em
+$submit-spacing: 0.5em
+$form-width: 28em
+
+.login-form-box
+  @include absolute-center()
+  box-sizing: border-box
+  width: $form-width
+  font-size: inherit
+
+.login-form-message
+  text-align: center
+
+.login-form-label
+  display: block
+  font-weight: normal
+  margin-bottom: 0.5em
+
+.login-form-email-group
+  position: relative
+  box-sizing: border-box
+  width: $form-width
+  padding-right: $submit-width + $submit-spacing
+
+.login-form-email-input
+  width: 100% !important
+
+.login-form-submit
+  position: absolute
+  top: 0
+  right: 0
+  width: $submit-width
+
+.login-from-note
+  font-size: $small-font-size
+  margin-top: $line-height

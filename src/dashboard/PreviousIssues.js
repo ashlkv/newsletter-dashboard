@@ -1,8 +1,7 @@
 let _ = require('lodash');
-let React = require('react');
+import React from 'react';
 
 import IssueRow from './IssueRow';
-import './previous-issues.sass';
 
 export default class PreviousIssues extends React.Component {
     constructor(props) {

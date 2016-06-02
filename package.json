@@ -45,6 +45,7 @@
     "lodash": "^4.13.0",
     "moment": "^2.13.0",
     "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react-dom": "^0.14.6",
+    "react-router": "^2.4.1"
   }
 }

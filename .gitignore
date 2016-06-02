@@ -1,7 +1,8 @@
+assets/subscribers.csv
+dist
 node_modules
 vendor
 .DS_Store
 .idea
-dist
 *.env
 npm-debug.log

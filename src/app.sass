@@ -3,6 +3,9 @@
 body
   font: #{$font-size}/#{$line-height-factor} $font-family
 
+a:hover, a:focus
+  text-decoration: none
+
 .app
   padding: 40px
 
@@ -11,5 +14,9 @@ body
   border-top: none
   padding: $margin
 
-.previous-issues
-  width: 40em
+.form-control, .btn
+  font-size: inherit
+  line-height: inherit
+
+.form-control
+  height: auto

@@ -1,5 +1,7 @@
 {
     "require": {
-        "vlucas/phpdotenv": "^2.2"
+        "vlucas/phpdotenv": "^2.2",
+        "firebase/php-jwt": "^3.0",
+        "phpmailer/phpmailer": "^5.2"
     }
 }

@@ -13,8 +13,6 @@ export default class PreviousIssues extends React.Component {
             return <IssueRow key={key} {...issue}/>;
         });
 
-        issueRows = issueRows.slice(0, 3);
-
         return (
             <table className="table previous-issues">
                 <caption>Последние выпуски</caption>

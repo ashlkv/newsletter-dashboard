@@ -10,13 +10,24 @@ class MailchimpCredentials extends HttpCredentials {
 class Mailchimp {
 	const API_BASE_URL = 'https://us12.api.mailchimp.com/3.0/';
 	const MAX_SUBSCRIBERS_COUNT = 10000;
+	const MAX_CAMPAIGNS_COUNT = 10;
 
 	public static function getCampaigns() {
+	    $fields = array(
+            'campaigns.id',
+            'campaigns.send_time',
+            'campaigns.settings.title',
+            'campaigns.settings.subject_line'
+        );
+
 		$response = HttpRequest::get(
             self::API_BASE_URL . "campaigns",
             array(
+                'fields' => implode($fields, ','),
                 'sort_field' => 'send_time',
-                'sort_dir' => 'DESC'
+                'sort_dir' => 'DESC',
+                'status' => 'sent',
+                'count' => self::MAX_CAMPAIGNS_COUNT
             ),
 			new MailchimpCredentials()
         );

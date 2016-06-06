@@ -10,7 +10,8 @@ export default class Dashboard extends React.Component {
        this.state = {
            data: {
                issues: []
-           }
+           },
+           loaded: false
        };
    }
 
@@ -21,7 +22,10 @@ export default class Dashboard extends React.Component {
                 cache: false
             })
             .then((response, textStatus, xhr) => {
-                this.setState({data: response.data});
+                this.setState({
+                    data: response.data,
+                    loaded: true
+                });
             })
             .fail(() => {
                 console.error('Не могу получить данные');
@@ -29,11 +33,14 @@ export default class Dashboard extends React.Component {
     }
 
     render() {
-        let data = {issues: this.state.data.issues};
+        let data = {
+            issues: this.state.data.issues
+        };
+        let previousIssues = this.state.loaded ? (<PreviousIssues {...data}/>) : (<div className="spinner"></div>);
         return (
             <div className="dashboard">
-                <h1>Личный кабинет</h1>
-                <PreviousIssues {...data}/>
+                <h1 className="dashboard-title">Личный кабинет</h1>
+                {previousIssues}
             </div>
         );
     }

@@ -1,5 +1,10 @@
 @import './vars'
 
+$spinner-size: 75px
+
+html, body, .root, .app
+  height: 100%
+  
 body
   font: #{$font-size}/#{$line-height-factor} $font-family
 
@@ -20,3 +25,24 @@ a:hover, a:focus
 
 .form-control
   height: auto
+
+.spinner
+  @include absolute-center()
+  height: $spinner-size
+  width: $spinner-size
+  text-indent: 250px
+  white-space: nowrap
+  overflow: hidden
+  -webkit-mask-image: url(../img/spinner.png)
+  background-color: $text-color
+  animation-name: spinnerRotate
+  animation-duration: 2s
+  animation-iteration-count: infinite
+  animation-timing-function: linear
+
+@keyframes spinnerRotate
+  from
+    transform: rotate(0deg)
+
+  to
+    transform: rotate(360deg)

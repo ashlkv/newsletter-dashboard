@@ -6,18 +6,12 @@
   "private": "true",
   "scripts": {
     "start": "node server.js",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "build": "rm -r ./dist && webpack --config webpack.production.js"
   },
   "keywords": [
-    "react",
-    "reactjs",
-    "boilerplate",
-    "hot",
-    "reload",
-    "hmr",
-    "live",
-    "edit",
-    "webpack"
+    "newsletter",
+    "dashboard"
   ],
   "devDependencies": {
     "autoprefixer": "^6.3.6",

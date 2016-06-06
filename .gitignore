@@ -7,3 +7,4 @@ vendor
 .idea
 *.env
 npm-debug.log
+config.json

@@ -4,6 +4,7 @@ var precss = require('precss');
 var autoprefixer = require('autoprefixer');
 
 module.exports = function(options) {
+    options = options || {};
     return {
         // Using devtool: eval in production build prevents UglifyJsPlugin from compressing the code
         devtool: options.production ? 'source-map' : 'eval',
@@ -32,7 +33,6 @@ module.exports = function(options) {
             })
         ] : [
                 new webpack.HotModuleReplacementPlugin()
-
             ],
         module: {
             loaders: [
@@ -57,6 +57,10 @@ module.exports = function(options) {
                 {
                     test: /\.png$/,
                     loader: 'url-loader?mimetype=image/png'
+                },
+                {
+                    test: /\.json$/,
+                    loader: 'json-loader'
                 },
                 {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file"},
                 {test: /\.(woff|woff2)$/, loader: "url?prefix=font/&limit=5000"},

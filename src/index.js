@@ -10,10 +10,14 @@ import Dashboard from './dashboard/Dashboard'
 import LoginForm from './login/LoginForm'
 import AuthFail from './login/AuthFail'
 
+console.log('process', process);
+
 global.moment = require('moment');
 moment.locale('ru');
 
 global.$ = require('jquery');
+
+let config = require('./../config.json');
 
 /**
  * Adds Authorization header to an XHR request and sets Auth.authorized property to true or false depending on server response.
@@ -43,7 +47,7 @@ $.authorizedXHR = function(options) {
 // <IndexRedirect to="/dashboard" />
 ReactDOM.render((
     <Router history={browserHistory}>
-        <Route path="/" component={App}>
+        <Route path={config.baseUrl} component={App}>
             <IndexRedirect to="/dashboard" />
             <Route path="login" component={LoginForm} />
             <Route path="auth-fail" component={AuthFail} />

@@ -6,8 +6,9 @@ var autoprefixer = require('autoprefixer');
 module.exports = function(options) {
     options = options || {};
     return {
-        // Using devtool: eval in production build prevents UglifyJsPlugin from compressing the code
-        devtool: options.production ? 'source-map' : 'eval',
+        // Using devtool: eval in production build prevents UglifyJsPlugin from compressing the code.
+        // Set devtool option to 'source-map' for production if source map is required.
+        devtool: options.production ? '' : 'eval',
         entry: options.production ? './src/index' : [
             'webpack-dev-server/client?http://localhost:3000',
             'webpack/hot/only-dev-server',
@@ -30,7 +31,9 @@ module.exports = function(options) {
                 'process.env': {
                     'NODE_ENV': JSON.stringify('production')
                 }
-            })
+            }),
+            // Include only necessary locales: decreases momentjs size four times.
+            new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(ru)$/)
         ] : [
             new webpack.HotModuleReplacementPlugin(),
             new webpack.DefinePlugin({

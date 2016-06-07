@@ -14,7 +14,7 @@ class CloudPaymentUtils {
 	static function getSubscribers() {
         if (!isset(self::$subscribers)) {
             if (!file_exists(self::SUBSCRIBERS_LIST_PATH)) {
-                throw new Exception('Не могу найти файл со списком подписчиков');
+                throw new Exception('Unable to find a file containing list of subscribers.');
             }
             $content = file_get_contents(self::SUBSCRIBERS_LIST_PATH);
             $lines = explode("\n", $content);

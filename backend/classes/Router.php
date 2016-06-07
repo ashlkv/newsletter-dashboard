@@ -7,22 +7,20 @@ class Router {
 		try {
 			$response = self::getResponse();
 		} catch (NotAuthorizedException $e) {
-			header('HTTP/1.1 401 Unauthorized', true, 401);
+			header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized', true, 401);
 		} catch (Exception $e) {
 			$response['error'] = $e->getMessage();
 		}
 
 		if ($response) {
-			if (self::acceptsJson()) {
-                header("Content-Type: application/json");
-                echo json_encode($response);
+		    $contentType = self::acceptsJson() ? 'application/json' : 'text/html';
+            header("Content-Type: " . $contentType . "; charset=utf-8");
+            if ($response['error']) {
+                // TODO A downside to sending errors inside a status code header is that error text should be in English.
+                // TODO UTF-8 encoded cyrillic texts get messed up.
+                header($_SERVER['SERVER_PROTOCOL'] . ' 500 ' . $response['error'], true, 500);
             } else {
-                header("Content-Type: text/html");
-                if ($response['data']) {
-                    echo $response['data'];
-                } else if ($response['error']) {
-                    echo $response['error'];
-                }
+                echo (self::acceptsJson() ? json_encode($response) : $response['data']);
             }
 		}
 	}
@@ -54,7 +52,7 @@ class Router {
 			switch($entity) {
 				case 'token':
 					if (!$identifier) {
-                        throw new Exception('Нужно указать email.');
+                        throw new Exception('You need to specify an email address.');
                     }
 
                     $subscriber = new Subscriber($identifier);

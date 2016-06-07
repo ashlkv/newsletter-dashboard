@@ -73,13 +73,39 @@ class Auth {
 	    $subject = 'Ссылка для входа в рассылку';
 	    $message = sprintf('<p>Привет!</p><p>Вот ваша <a href="%1$s">ссылка для входа в личный кабинет</a> рассылки Сергея Короля.</p>', $link);
 
-	    $headers = sprintf('From: %1$s <%2$s>'."\r\n"
-        .'Reply-To: %1$s <%2$s>'."\r\n"
-        .'Content-type: text/html; charset=utf-8'."\r\n"
-        , $_ENV['EMAIL_SENDER_NAME'], $_ENV['REPLY_TO_EMAIL']);
+        self::email($email, $subject, $message);
+	}
 
-        // TODO Use PHPMailer to send emails via smtp
-        mail($email, $subject, $message, $headers);
+    // TODO Move to a separate utility
+	static public function email($to, $subject, $message) {
+        $from = sprintf('%1$s <%2$s>', $_ENV['EMAIL_SENDER_NAME'], $_ENV['REPLY_TO_EMAIL']);
+
+	    // PHPMailer
+	    if (class_exists('PHPMailer')) {
+            $mail = new PHPMailer();
+            // Telling the class to use SMTP
+            $mail->IsSMTP();
+            // SMTP server
+            $mail->Host = $_ENV['SMTP_SERVER'];
+            $mail->From = $_ENV['REPLY_TO_EMAIL'];
+            $mail->FromName = $_ENV['EMAIL_SENDER_NAME'];
+            $mail->AddAddress($to);
+            $mail->Subject = $subject;
+            $mail->Body = $message;
+
+            $result = $mail->Send();
+            if (!$result) {
+                throw new Exception('Unable to send email. Error: ' . $mail->ErrorInfo);
+            }
+        // Regular built-in php mail function
+	    } else {
+	        $headers = sprintf('From: %1$s'."\r\n"
+                    .'Reply-To: %1$s'."\r\n"
+                    .'Content-type: text/html; charset=utf-8'."\r\n"
+                    , $from);
+
+            mail($to, $subject, $message, $headers);
+	    }
 	}
 }
 

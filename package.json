@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "lint": "eslint src",
-    "build": "rm -r ./dist && webpack --config webpack.production.js"
+    "build": "rm -rf ./dist && webpack --config webpack.production.js"
   },
   "keywords": [
     "newsletter",

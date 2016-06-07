@@ -56,7 +56,7 @@ module.exports = function(options) {
             loaders: [
                 {
                     test: /\.js$/,
-                    loaders: options.production ? ['babel'] : ['react-hot', 'babel'],
+                    loaders: options.production ? ['babel?presets[]=es2015,presets[]=stage-0,presets[]=react'] : ['react-hot', 'babel'],
                     exclude: /(node_modules)/,
                     include: path.join(__dirname, 'src')
                 },

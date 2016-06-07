@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var precss = require('precss');
 var autoprefixer = require('autoprefixer');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = function(options) {
     options = options || {};
@@ -16,7 +17,7 @@ module.exports = function(options) {
         ],
         output: {
             path: options.production ? path.join(__dirname, 'dist') : path.join(__dirname, 'build'),
-            publicPath: options.production ? '' : 'http://localhost:3000/build/',
+            publicPath: options.production ? '' : 'http://localhost:3000/',
             filename: options.production ? 'app.[hash].js' : 'app.js'
         },
         node: {
@@ -32,6 +33,11 @@ module.exports = function(options) {
                     'NODE_ENV': JSON.stringify('production')
                 }
             }),
+            new HtmlWebpackPlugin({
+                template: './tmpl.html',
+                filename: 'index.html',
+                production: true
+            }),
             // Include only necessary locales: decreases momentjs size four times.
             new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(ru)$/)
         ] : [
@@ -40,6 +46,10 @@ module.exports = function(options) {
                 'process.env': {
                     'NODE_ENV': JSON.stringify('dev')
                 }
+            }),
+            new HtmlWebpackPlugin({
+                template: './tmpl.html',
+                filename: 'index.html'
             })
         ],
         module: {

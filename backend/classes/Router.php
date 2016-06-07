@@ -112,7 +112,8 @@ class Router {
 
 	public static function acceptsJson() {
 		$headers = getallheaders();
-		return (bool) preg_match('/application\/json/', $headers['Accept']);
+		$acceptHeader = $headers['Accept'] ? $headers['Accept'] : $headers['accept'];
+		return (bool) preg_match('/application\/json/', $acceptHeader);
 	}
 }
 

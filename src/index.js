@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
+import { createHistory, useBasename } from 'history'
 
 import App from './App'
 import Auth from './Auth';
@@ -16,6 +17,10 @@ moment.locale('ru');
 global.$ = require('jquery');
 
 let config = require(`./config/config.${process.env.NODE_ENV}.json`);
+
+const history = useBasename(createHistory)({
+    basename: config.baseUrl
+});
 
 /**
  * Adds Authorization header to an XHR request and sets Auth.authorized property to true or false depending on server response.
@@ -41,11 +46,9 @@ $.authorizedXHR = function(options) {
     });
 };
 
-// TODO Redirection from / to dashboard does not work if user is not logged in (no token in storage)
-// <IndexRedirect to="/dashboard" />
 ReactDOM.render((
     <Router history={browserHistory}>
-        <Route path={config.baseUrl} component={App}>
+        <Route path="/" component={App}>
             <IndexRedirect to="/dashboard" />
             <Route path="login" component={LoginForm} />
             <Route path="auth-fail" component={AuthFail} />

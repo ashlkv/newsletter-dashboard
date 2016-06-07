@@ -26,11 +26,16 @@ a:hover, a:focus
 .form-control
   height: auto
 
+.modal-backdrop
+  background: white
+
 .spinner
-  @include absolute-center()
+  position: absolute
+  left: 50%
+  top: 50%
   height: $spinner-size
   width: $spinner-size
-  text-indent: 250px
+  margin: (-$spinner-size / 2) 0 0 (-$spinner-size / 2)
   white-space: nowrap
   overflow: hidden
   -webkit-mask-image: url(../img/spinner.png)

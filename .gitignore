@@ -7,3 +7,5 @@ vendor
 .idea
 *.env
 npm-debug.log
+composer.lock
+composer.phar

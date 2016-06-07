@@ -2,6 +2,22 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+if (!function_exists('getallheaders'))
+{
+    function getallheaders()
+    {
+       $headers = '';
+       foreach ($_SERVER as $name => $value)
+       {
+           if (substr($name, 0, 5) == 'HTTP_')
+           {
+               $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+           }
+       }
+       return $headers;
+    }
+}
+
 date_default_timezone_set('Europe/Moscow');
 
 $dotenv = new Dotenv\Dotenv(__DIR__ . '/../');

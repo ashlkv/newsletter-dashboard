@@ -2,8 +2,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
-import { createHistory, useBasename } from 'history'
+import { Router, Route, IndexRedirect, useRouterHistory} from 'react-router'
+import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 import App from './App'
 import Auth from './Auth';
@@ -18,7 +18,7 @@ global.$ = require('jquery');
 
 let config = require(`./config/config.${process.env.NODE_ENV}.json`);
 
-const history = useBasename(createHistory)({
+const browserHistory = useRouterHistory(createBrowserHistory)({
     basename: config.baseUrl
 });
 
@@ -35,6 +35,9 @@ $.authorizedXHR = function(options) {
             Authorization: `Bearer ${token}`
         });
     }
+    // Prepending base url to all request urls
+    options.url = config.baseUrl.replace(/\/$/, '') + options.url;
+
     return $.ajax(options).always(function(data, textStatus, xhr) {
         // If request returns 200 response, set authorized to true
         if (xhr.status === 200) {

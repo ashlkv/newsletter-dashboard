@@ -2,6 +2,7 @@
     "require": {
         "vlucas/phpdotenv": "^2.2",
         "firebase/php-jwt": "^3.0",
-        "phpmailer/phpmailer": "^5.2"
+        "phpmailer/phpmailer": "^5.2",
+        "ralouphie/getallheaders": "^2.0"
     }
 }

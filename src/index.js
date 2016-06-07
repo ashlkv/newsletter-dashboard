@@ -10,14 +10,12 @@ import Dashboard from './dashboard/Dashboard'
 import LoginForm from './login/LoginForm'
 import AuthFail from './login/AuthFail'
 
-console.log('process', process);
-
 global.moment = require('moment');
 moment.locale('ru');
 
 global.$ = require('jquery');
 
-let config = require('./../config.json');
+let config = require(`./config/config.${process.env.NODE_ENV}.json`);
 
 /**
  * Adds Authorization header to an XHR request and sets Auth.authorized property to true or false depending on server response.

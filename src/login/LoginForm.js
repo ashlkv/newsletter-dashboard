@@ -45,7 +45,7 @@ export default class LoginForm extends React.Component {
         }).fail((xhr) => {
             this.setState({
                 status: status.error,
-                message: `${xhr.status} — ${xhr.statusText}`
+                message: xhr.statusText
             });
         }).done(() => {
             this.setState({
@@ -56,15 +56,16 @@ export default class LoginForm extends React.Component {
 
     render() {
         let content;
+
         if (this.state.status === status.error) {
+            let rawMessage = {__html: this.state.message};
             content = (
-                <p className="login-form-message login-form-error">
+                <div className="login-form-message login-form-error">
                     Ошибка при отправке письма:
-                    <br/>
-                    {this.state.message}
-                </p>);
+                    <div dangerouslySetInnerHTML={rawMessage}></div>
+                </div>);
         } else if (this.state.status === status.success) {
-            content = <p className="login-form-message">Ссылка для входа отправлена на почту.</p>;
+            content = <div className="login-form-message" >Ссылка для входа отправлена на почту.</div>;
         } else {
             let backdrop = (<div className="modal-backdrop fade in">
                     <div className="spinner"></div>

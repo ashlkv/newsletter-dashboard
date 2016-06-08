@@ -76,7 +76,7 @@ class Mailchimp {
         }
 
         if (!$newsletterList) {
-            throw new Exception('Unable to get Mailchimp lists data.');
+            throw new Exception('Не могу получить информацию о списках');
         }
 
         return $newsletterList;

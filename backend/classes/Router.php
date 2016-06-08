@@ -15,12 +15,13 @@ class Router {
 		if ($response) {
 		    $contentType = self::acceptsJson() ? 'application/json' : 'text/html';
             header("Content-Type: " . $contentType . "; charset=utf-8");
-            if ($response['error']) {
-                // TODO A downside to sending errors inside a status code header is that error text should be in English.
-                // TODO UTF-8 encoded cyrillic texts get messed up.
-                header($_SERVER['SERVER_PROTOCOL'] . ' 500 ' . $response['error'], true, 500);
+            // A downside to sending errors inside a status code header is that error text should be in English and cannot contain markup.
+            // UTF-8 encoded cyrillic texts get messed up or fail to send entirely.
+            // Sending errors in 'error' response property.
+            if (self::acceptsJson()) {
+                echo json_encode($response);
             } else {
-                echo (self::acceptsJson() ? json_encode($response) : $response['data']);
+                echo ($response['error'] ? $response['error'] : $response['data']);
             }
 		}
 	}
@@ -52,7 +53,7 @@ class Router {
 			switch($entity) {
 				case 'token':
 					if (!$identifier) {
-                        throw new Exception('You need to specify an email address.');
+                        throw new Exception('Нужно указать email.');
                     }
 
                     $subscriber = new Subscriber($identifier);
@@ -62,11 +63,9 @@ class Router {
                         $token = Auth::generateToken($subscriber);
 
                         Auth::emailToken($subscriber->email, $token);
-                        // TODO Approve this text
                         $data = 'Ссылка для входа отправлена на почту.';
                     } else {
-                        // TODO Approve this text
-                        $error = 'Вы ещё не подписаны на рассылку. <a href="http://sergeykorol.ru/blog/newsletter/">Подписаться</a>';
+                        $error = sprintf('Вы ещё не подписаны на рассылку. <a href="%1$s">Подписаться</a>', Url::getBaseLink());
                     }
 					break;
 

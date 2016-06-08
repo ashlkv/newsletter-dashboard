@@ -38,15 +38,32 @@ $.authorizedXHR = function(options) {
     // Prepending base url to all request urls
     options.url = config.baseUrl.replace(/\/$/, '') + options.url;
 
-    return $.ajax(options).always(function(data, textStatus, xhr) {
-        // If request returns 200 response, set authorized to true
-        if (xhr.status === 200) {
-            Auth.setAuthorized(true, token);
-        // If request returns 401 Unauthorized response, remove auth token and set authorized to false
-        } else if (xhr.status === 401) {
-            Auth.setAuthorized(false);
-        }
-    });
+    return $.ajax(options)
+        .always(function(data, textStatus, xhr) {
+            // If request returns 200 response, set authorized to true
+            if (xhr.status === 200) {
+                Auth.setAuthorized(true, token);
+            // If request returns 401 Unauthorized response, remove auth token and set authorized to false
+            } else if (xhr.status === 401) {
+                Auth.setAuthorized(false);
+            }
+        })
+        .then(function(response) {
+            // No way to reject a current promise within then() except by creating a new promise with $.Deferred()
+            // Adding an statusText to look like xhr object that is passed to fail() function
+            return response.error ? $.Deferred().reject({statusText: response.error}) : response;
+        })
+        .fail(function(response, textStatus) {
+            // Handling json parse error
+            if (textStatus && textStatus === 'parsererror') {
+                // Adding parse error text to statusText
+                response.statusText = 'Синтаксическая ошибка';
+            // Handling http errors
+            } else if (response.status) {
+                // Tweaking status text by adding status code
+                response.statusText = `${response.status} — ${response.statusText}`;
+            }
+        });
 };
 
 ReactDOM.render((

@@ -4,19 +4,8 @@ class Auth {
     // Token lifetime in seconds (2678400 is one month)
     const TOKEN_LIFETIME = 2678400;
 
-    // TODO Move to a separate utility
-    static public function getHost() {
-        return $_SERVER['HTTP_HOST'];
-    }
-
-    // TODO Move to a separate utility
-    static public function getProtocol() {
-        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-    }
-
-    // TODO Move to a separate utility
     static public function getAuthLink($token) {
-        return self::getProtocol() . self::getHost() . $_ENV['BASE_URL'] . 'dashboard?token=' . $token;
+        return Url::getBaseLink() . 'dashboard?token=' . $token;
     }
 
     static public function getId() {
@@ -32,8 +21,8 @@ class Auth {
         $time = time();
         $key = self::getId();
         $token = array(
-            "iss" => self::getHost(),
-            "aud" => self::getHost(),
+            "iss" => Url::getHost(),
+            "aud" => Url::getHost(),
             // Issued-at time. Contains the UTC Unix time at which this token was issued.
             "iat" => $time,
             // Expiration time. It contains the UTC Unix time after which you should no longer accept this token
@@ -114,7 +103,7 @@ class Auth {
 
             $result = $mail->Send();
             if (!$result) {
-                throw new Exception('Unable to send email. Error: ' . $mail->ErrorInfo);
+                throw new Exception('Не могу отправить письмо. Ошибка: ' . $mail->ErrorInfo);
             }
         // Regular built-in php mail function
 	    } else {

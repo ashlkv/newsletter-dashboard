@@ -50,7 +50,7 @@ class Auth {
             // JWT token is passed via authorization header and looks like the following:
             // Authorization: Bearer <token>
             $headers = getallheaders();
-            $token = preg_replace('/^Bearer\s+/i', '', $headers['Authorization']);
+            $token = preg_replace('/^Bearer\s+/i', '', $headers['Authorization'] ? $headers['Authorization'] : $headers['authorization']);
 	    }
 	    return $token;
 	}
@@ -90,12 +90,18 @@ class Auth {
 	    if (class_exists('PHPMailer')) {
             $mail = new PHPMailer();
 
-            $mail->IsSMTP();
-            $mail->Host = $_ENV['SMTP_SERVER'];
-            $mail->Port = 587;
-            $mail->SMTPAuth = true;
-            $mail->Username = $_ENV['SMTP_USER'];
-            $mail->Password = $_ENV['SMTP_PASSWORD'];
+            // smtp, faster
+            if ($_ENV['USE_SMTP']) {
+                $mail->IsSMTP();
+                $mail->Host = $_ENV['SMTP_SERVER'];
+                $mail->Port = 587;
+                $mail->SMTPAuth = true;
+                $mail->Username = $_ENV['SMTP_USER'];
+                $mail->Password = $_ENV['SMTP_PASSWORD'];
+            // sendmail, slower
+            } else {
+                $mail->IsMail();
+            }
 
             $mail->Debugoutput = 'html';
             $mail->CharSet = 'utf-8';

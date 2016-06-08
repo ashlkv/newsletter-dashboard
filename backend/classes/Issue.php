@@ -54,7 +54,7 @@ class Issue {
 	}
 
 	private static function extractLink($campaign) {
-	    return '/backend/issue/' . $campaign['id'] . '/content';
+	    return Url::getBaseLink() . 'backend/issue/' . $campaign['id'] . '/content';
 	}
 }
 

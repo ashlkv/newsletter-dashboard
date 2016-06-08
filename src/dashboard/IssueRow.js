@@ -19,7 +19,7 @@ export default class IssueRow extends React.Component {
                 <td className="issue-date">{dateFormatted}</td>
                 <td>
                     <header className="issue-row-header">
-                        <a href={link}>
+                        <a href={link} target="_blank">
                             #{this.props.number} — {this.props.subject}
                         </a>
                     {/* <a className="btn btn-default issue-share" role="button" onClick={this.onClick.bind(this)}>Поделиться</a> */}

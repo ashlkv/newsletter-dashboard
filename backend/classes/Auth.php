@@ -1,16 +1,22 @@
 <?
 
 class Auth {
-    const REPLY_TO_EMAIL = '';
     // Token lifetime in seconds (2678400 is one month)
     const TOKEN_LIFETIME = 2678400;
 
+    // TODO Move to a separate utility
     static public function getHost() {
         return $_SERVER['HTTP_HOST'];
     }
 
+    // TODO Move to a separate utility
+    static public function getProtocol() {
+        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    }
+
+    // TODO Move to a separate utility
     static public function getAuthLink($token) {
-        return $_SERVER['REQUEST_SCHEME'] . '://' . self::getHost() . $_ENV['BASE_URL'] . 'dashboard?token=' . $token;
+        return self::getProtocol() . self::getHost() . $_ENV['BASE_URL'] . 'dashboard?token=' . $token;
     }
 
     static public function getId() {
@@ -78,18 +84,25 @@ class Auth {
 
     // TODO Move to a separate utility
 	static public function email($to, $subject, $message) {
-        $from = sprintf('%1$s <%2$s>', $_ENV['EMAIL_SENDER_NAME'], $_ENV['REPLY_TO_EMAIL']);
+        $from = sprintf('%1$s <%2$s>', $_ENV['EMAIL_SENDER_NAME'], $_ENV['SMTP_USER']);
 
 	    // PHPMailer
 	    if (class_exists('PHPMailer')) {
             $mail = new PHPMailer();
-            // Telling the class to use SMTP
+
             $mail->IsSMTP();
-            // SMTP server
             $mail->Host = $_ENV['SMTP_SERVER'];
-            $mail->From = $_ENV['REPLY_TO_EMAIL'];
+            $mail->Port = 587;
+            $mail->SMTPAuth = true;
+            $mail->Username = $_ENV['SMTP_USER'];
+            $mail->Password = $_ENV['SMTP_PASSWORD'];
+
+            $mail->Debugoutput = 'html';
+            $mail->CharSet = 'utf-8';
+            $mail->From = $_ENV['SMTP_USER'];
             $mail->FromName = $_ENV['EMAIL_SENDER_NAME'];
             $mail->AddAddress($to);
+            $mail->IsHTML(true);
             $mail->Subject = $subject;
             $mail->Body = $message;
 

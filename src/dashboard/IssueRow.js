@@ -17,7 +17,7 @@ export default class IssueRow extends React.Component {
         return (
             <tr className="issue-row">
                 <td className="issue-date">{dateFormatted}</td>
-                <td>
+                <td className="issue-subject">
                     <header className="issue-row-header">
                         <a href={link} target="_blank">
                             #{this.props.number} — {this.props.subject}

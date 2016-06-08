@@ -8,14 +8,14 @@
   margin-top: 0
 
 .previous-issues
-  width: 50em
+  max-width: 50em
+  width: 100%
 
 .issue-date
   white-space: nowrap
 
 .issue-row-header
   position: relative
-  padding-right: 9em
 
 .issue-share
   position: absolute
@@ -28,3 +28,14 @@
     opacity: 1
     visibility: visible
     transition: $transition-fade-to-visible
+
+@media (max-width: $small-width)
+  .issue-date,
+  .issue-subject
+    display: block
+    padding: 0 !important
+    appearance: none
+    margin-bottom: 1em
+
+  .issue-date
+    margin-top: 2em

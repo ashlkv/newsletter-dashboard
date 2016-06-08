@@ -24,7 +24,7 @@ $form-width: 28em
 .login-form-email-group
   position: relative
   box-sizing: border-box
-  width: $form-width
+  width: 100%
   padding-right: $submit-width + $submit-spacing
 
 .login-form-email-input
@@ -39,3 +39,16 @@ $form-width: 28em
 .login-from-note
   font-size: $small-font-size
   margin-top: $line-height
+
+@media (max-width: $small-width)
+  .login-form-box
+    width: 80%
+    max-width: $form-width
+
+  .login-form-email-group
+    padding-right: 0
+
+  .login-form-submit
+    position: static
+    width: 100%
+    margin-top: $margin / 2

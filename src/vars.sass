@@ -1,0 +1,29 @@
+$font-size: 17px
+$font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, Verdana, sans-serif
+$line-height-factor: 1.6
+$line-height: $font-size * $line-height-factor
+
+$small-font-size: 14px
+
+$margin: 20px
+$horizontal-space: 7px
+
+$text-color: #333
+$error-color: #d9534f
+
+$transition-fade-to-visible: opacity 0.25s ease, visibility 0s
+$transition-fade-to-invisible: opacity 0.25s ease, visibility 0s ease 0.25s
+
+@mixin absolute-center()
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+@mixin fade-to-visible()
+  opacity: 0
+  transition: $transition-fade-to-invisible
+  &.visible
+    opacity: 1
+    visibility: visible
+    transition: $transition-fade-to-visible

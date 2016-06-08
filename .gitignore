@@ -1,5 +1,11 @@
+assets/subscribers.csv
+dist
+build
 node_modules
-npm-debug.log
+vendor
 .DS_Store
 .idea
-dist
+*.env
+npm-debug.log
+composer.lock
+composer.phar

@@ -1,2 +1,55 @@
+@import './vars'
+
+$spinner-size: 50px
+
+html, body, .root, .app
+  height: 100%
+  
+body
+  font: #{$font-size}/#{$line-height-factor} $font-family
+
+a:hover, a:focus
+  text-decoration: none
+
 .app
   padding: 40px
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td,
+.table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th
+  border-top: none
+  padding: $margin
+
+.form-control, .btn
+  font-size: inherit
+  line-height: inherit
+
+.form-control
+  height: auto
+
+.modal-backdrop
+  background: white
+  &.in
+    opacity: 0.8
+
+.spinner
+  position: absolute
+  left: 50%
+  top: 50%
+  height: $spinner-size
+  width: $spinner-size
+  margin: (-$spinner-size / 2) 0 0 (-$spinner-size / 2)
+  white-space: nowrap
+  overflow: hidden
+  -webkit-mask-image: url(../img/spinner.png)
+  background-color: $text-color
+  animation-name: spinnerRotate
+  animation-duration: 1.5s
+  animation-iteration-count: infinite
+  animation-timing-function: linear
+
+@keyframes spinnerRotate
+  from
+    transform: rotate(0deg)
+
+  to
+    transform: rotate(360deg)

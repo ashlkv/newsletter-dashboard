@@ -61,9 +61,6 @@ class Auth {
 	}
 
 	static public function emailToken($email, $token) {
-	    // TODO Remove
-	    $email = 'anna.shishlyakova@gmail.com';
-
         $link = self::getAuthLink($token);
 	    $subject = 'Ссылка для входа в рассылку';
 	    $message = sprintf('<p>Привет!</p><p>Вот ваша <a href="%1$s">ссылка для входа в личный кабинет</a> рассылки Сергея Короля.</p>', $link);

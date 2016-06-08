@@ -53,7 +53,7 @@ ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={App}>
             <IndexRedirect to="/dashboard" />
-            <Route path="login" component={LoginForm} />
+            <Route path="login" component={LoginForm} onEnter={Auth.onRestrictedRouteEnter} />
             <Route path="auth-fail" component={AuthFail} />
             <Route path="dashboard" component={Dashboard} onEnter={Auth.onRestrictedRouteEnter} />
         </Route>

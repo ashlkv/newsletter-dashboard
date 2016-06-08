@@ -78,8 +78,10 @@ let onRestrictedRouteEnter = function(nextState, replace, callback) {
             .always(() => {
                 // If server auth is successful, proceed to the url, but without the token parameter
                 if (isAuthorized()) {
+                    // Do not allow authorized users on login page: redirect them to dashboard
+                    let pathname = /^\/?login/.test(nextState.location.pathname) ? '/dashboard' : nextState.location.pathname;
                     replace({
-                        pathname: location.pathname
+                        pathname: pathname
                     });
                 // Otherwise, go to auth error page with a link to login form
                 } else {

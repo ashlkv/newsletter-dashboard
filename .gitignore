@@ -1,6 +1,7 @@
 assets/subscribers.csv
-dist
 build
+dist
+landing
 node_modules
 vendor
 .DS_Store

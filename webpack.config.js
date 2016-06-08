@@ -6,6 +6,9 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = function(options) {
     options = options || {};
+    var environment = options.production ? 'production' : 'dev';
+    var config = require('./src/config/config.' + environment + '.json');
+
     return {
         // Using devtool: eval in production build prevents UglifyJsPlugin from compressing the code.
         // Set devtool option to 'source-map' for production if source map is required.
@@ -17,7 +20,7 @@ module.exports = function(options) {
         ],
         output: {
             path: options.production ? path.join(__dirname, 'dist') : path.join(__dirname, 'build'),
-            publicPath: options.production ? '' : 'http://localhost:3000/',
+            publicPath: config.baseUrl,
             filename: options.production ? 'app.[hash].js' : 'app.js'
         },
         node: {
@@ -30,12 +33,12 @@ module.exports = function(options) {
             // React production build: smaller than dev
             new webpack.DefinePlugin({
                 'process.env': {
-                    'NODE_ENV': JSON.stringify('production')
+                    'NODE_ENV': JSON.stringify(environment)
                 }
             }),
             new HtmlWebpackPlugin({
                 template: './tmpl.html',
-                filename: 'index.html',
+                filename: 'app.html',
                 production: true
             }),
             // Include only necessary locales: decreases momentjs size four times.
@@ -44,7 +47,7 @@ module.exports = function(options) {
             new webpack.HotModuleReplacementPlugin(),
             new webpack.DefinePlugin({
                 'process.env': {
-                    'NODE_ENV': JSON.stringify('dev')
+                    'NODE_ENV': JSON.stringify(environment)
                 }
             }),
             new HtmlWebpackPlugin({

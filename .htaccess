@@ -1,6 +1,9 @@
 Options +FollowSymlinks
 
-# To redirect all web app routes to index.html when in production or on backend server.
+# To redirect all web app routes to app.html when in production or on backend server.
 RewriteEngine on
-RewriteCond %{REQUEST_URI} !\.(gif|jpe?g|png|css|js)$
-RewriteRule .* index.html [NC]
+
+RewriteRule ^/?$ index.html [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule .* app.html [L]

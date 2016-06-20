@@ -10,7 +10,7 @@ class MailchimpCredentials extends HttpCredentials {
 class Mailchimp {
 	const API_BASE_URL = 'https://us12.api.mailchimp.com/3.0/';
 	const MAX_SUBSCRIBERS_COUNT = 10000;
-	const MAX_CAMPAIGNS_COUNT = 10;
+	const MAX_CAMPAIGNS_COUNT = 30;
 
 	public static function getCampaigns() {
 	    $fields = array(

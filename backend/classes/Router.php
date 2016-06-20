@@ -79,7 +79,7 @@ class Router {
             switch($entity) {
                 case 'dashboard':
                     $data = array(
-                        'issues' => array_slice(Issue::getAll(), 0, 3)
+                        'issues' => Issue::getAll(),
                     );
                     break;
 

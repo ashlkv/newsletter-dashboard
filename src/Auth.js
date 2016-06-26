@@ -66,6 +66,10 @@ let authValidationRequired = function() {
     return !isAuthorized() && (getQueryToken() || getToken());
 };
 
+let isExplicitAuth = function() {
+    return getQueryToken();
+};
+
 /**
  * Makes auth request
  * @returns {Promise}
@@ -126,7 +130,7 @@ let onRestrictedRouteEnter = function(nextState, replace, callback) {
         // If auth validation failed, go to auth error page with a link to login form
         }).fail(function() {
             replace({
-                pathname: '/auth-fail',
+                pathname: isExplicitAuth() ? '/auth-fail' : '/login',
                 state: {nextPathname: nextState.location.pathname}
             });
             callback();

@@ -8,57 +8,28 @@ class Auth {
         return Url::getBaseLink() . 'dashboard?token=' . $token;
     }
 
-    static public function getId() {
-        return $_ENV['JWT_ID'];
-    }
-
     static public function isAuthorized() {
-        $token = self::extractToken();
+        $token = Token::extract();
         return (bool) ($token && self::validateToken($token));
     }
 
-	static public function generateToken(Subscriber $subscriber) {
-        $time = time();
-        $key = self::getId();
-        $token = array(
-            "iss" => Url::getHost(),
-            "aud" => Url::getHost(),
-            // Issued-at time. Contains the UTC Unix time at which this token was issued.
-            "iat" => $time,
-            // Expiration time. It contains the UTC Unix time after which you should no longer accept this token
-            "exp" => $time + self::TOKEN_LIFETIME
+    static public function generateToken(Subscriber $subscriber) {
+        $payload = array(
+            'email' => $subscriber->email,
+            'exp' => time() + self::TOKEN_LIFETIME
         );
+        return Token::generate($payload);
+    }
 
-        // HS256 is the same as sha256
-        return \Firebase\JWT\JWT::encode($token, $key, 'HS256');
-	}
+    static public function validateToken($string) {
+        $decoded = Token::validate($string);
 
-	static public function extractToken() {
-	    $token = $_REQUEST['token'];
-	    if (!$token) {
-            // JWT token is passed via authorization header and looks like the following:
-            // Authorization: Bearer <token>
-            $headers = getallheaders();
-            $token = preg_replace('/^Bearer\s+/i', '', $headers['Authorization'] ? $headers['Authorization'] : $headers['authorization']);
-	    }
-	    return $token;
-	}
-
-	static public function validateToken($string) {
-	    $key = self::getId();
-	    try {
-            $decoded = \Firebase\JWT\JWT::decode($string, $key, array('HS256'));
-        // TODO This way token parser message is lost
-        } catch (Exception $e) {
+        // FIXME Change to if ($decoded && !$decoded->email) in a month when all tokens without email expire
+        if ($decoded && isset($decoded->issueId)) {
             $decoded = false;
         }
-
-        /*
-         NOTE: This will now be an object instead of an associative array. To get
-         an associative array, you will need to cast it as such:
-        */
         return $decoded;
-	}
+    }
 
 	static public function emailToken($email, $token) {
         $link = self::getAuthLink($token);

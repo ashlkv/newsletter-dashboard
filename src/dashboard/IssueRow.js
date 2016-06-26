@@ -13,13 +13,12 @@ export default class IssueRow extends React.Component {
     render() {
         // TODO Include year if year is different.
         let dateFormatted = this.props.timestamp ? moment(this.props.timestamp * 1000).format('D MMMM') : null;
-        let link = Auth.addTokenToQuery(this.props.link);
         return (
             <tr className="issue-row">
                 <td className="issue-date">{dateFormatted}</td>
                 <td className="issue-subject">
                     <header className="issue-row-header">
-                        <a href={link} target="_blank">
+                        <a href={this.props.link} target="_blank" data-share={this.props.shareUrl}>
                             #{this.props.number} — {this.props.subject}
                         </a>
                     {/* <a className="btn btn-default issue-share" role="button" onClick={this.onClick.bind(this)}>Поделиться</a> */}

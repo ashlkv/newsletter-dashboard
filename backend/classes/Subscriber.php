@@ -7,7 +7,7 @@ class Subscriber {
 		$this->email = strtolower($email);
 	}
 
-	private function hydrate($data) {
+	private function hydrate() {
 		// Fetching user data from Mailchimp list
 		$data = Mailchimp::getSubscriber($this->email);
 
@@ -25,7 +25,7 @@ class Subscriber {
 
 	public function isSubscribed() {
 		if (!isset($this->subscribed)) {
-			$this->hydrate($data);
+			$this->hydrate();
 		}
 		return $this->subscribed;
 	}

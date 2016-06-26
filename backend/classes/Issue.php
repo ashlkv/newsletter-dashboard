@@ -1,6 +1,9 @@
 <?
 
 class Issue {
+	// Token lifetime in seconds (31536000 is one year)
+    const TOKEN_LIFETIME = 630720000;
+
 	public static function getAll() {
 		$campaigns = Mailchimp::getCampaigns();
         // Returning an array of objects
@@ -30,6 +33,7 @@ class Issue {
 	}
 
 	private static function extractIssue($campaign) {
+		$id = $campaign['id'];
 		$datetime = new DateTime($campaign['send_time']);
 		$timestamp = $campaign['send_time'] ? $datetime->getTimestamp() : null;
 
@@ -43,19 +47,46 @@ class Issue {
 
 		$link = self::extractLink($campaign);
 
+		$authToken = Token::extract();
+		$issueToken = self::generateToken($id);
+
 		return array(
-			'id' => $campaign['id'],
+			'id' => $id,
            'timestamp' => $timestamp,
            'title' => $title,
            'subject' => $subject,
            'number' => $number,
-           'link' => $link
+           'link' => $link . '?token=' . $authToken,
+           'shareUrl' => $link . '?token=' . $issueToken
        );
 	}
 
 	private static function extractLink($campaign) {
-	    return Url::getBaseLink() . 'backend/issue/' . $campaign['id'] . '/content';
+	    $link = Url::getBaseLink() . 'backend/issue/' . $campaign['id'] . '/content';
+	    return $link;
 	}
+
+    static public function validateToken($string, $issueId) {
+        $decoded = Token::validate($string);
+
+        // If there is an issue id encoded in token payload, check token issue id against issue id parameter.
+        // If there is no issue id encoded in token payload, consider token invalid.
+        return $decoded && $decoded->issueId ? $decoded->issueId === $issueId : false;
+    }
+
+    static public function generateToken($issueId) {
+        $payload = array(
+            'issueId' => $issueId,
+            'exp' => time() + self::TOKEN_LIFETIME
+        );
+        return Token::generate($payload);
+    }
+
+    static public function isAuthorized($issueId) {
+        $token = Token::extract();
+        return (bool) ($token && self::validateToken($token, $issueId));
+    }
+
 }
 
 ?>

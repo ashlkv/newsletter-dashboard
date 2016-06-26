@@ -28,9 +28,9 @@ class Router {
 
 	public static function getResponse() {
 		$parameters = explode('/', $_REQUEST['path']);
-        $entity = $parameters[0];
-        $identifier = $parameters[1];
-        $property = $parameters[2];
+        $entity = count($parameters) > 0 ? $parameters[0] : null;
+        $identifier = count($parameters) > 1 ? $parameters[1] : null;
+        $property = count($parameters) > 2 ? $parameters[2] : null;
 
         try {
 		    $authorized = Auth::isAuthorized();
@@ -68,6 +68,15 @@ class Router {
                         $error = sprintf('Вы ещё не подписаны на рассылку. <a href="%1$s">Подписаться</a>', Url::getBaseLink());
                     }
 					break;
+
+                // Single issue token
+				case 'issue':
+				    if (Issue::isAuthorized($identifier) && $property && $property === 'content') {
+                        $data = Issue::getContent($identifier);
+				    } else {
+				        throw new NotAuthorizedException();
+				    }
+				    break;
 
 				default:
 			        // Return 401 response code for all other non-authorized requests
@@ -109,7 +118,7 @@ class Router {
 
 	public static function acceptsJson() {
 		$headers = getallheaders();
-		$acceptHeader = $headers['Accept'] ? $headers['Accept'] : $headers['accept'];
+		$acceptHeader = isset($headers['Accept']) ? $headers['Accept'] : (isset($headers['accept']) ? $headers['accept'] : null);
 		return (bool) preg_match('/application\/json/', $acceptHeader);
 	}
 }
